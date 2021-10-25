@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RappiFixer", "RappiFixer\RappiFixer.csproj", "{A06D88ED-326D-4C20-B002-7B9364B91D1D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A06D88ED-326D-4C20-B002-7B9364B91D1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A06D88ED-326D-4C20-B002-7B9364B91D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A06D88ED-326D-4C20-B002-7B9364B91D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A06D88ED-326D-4C20-B002-7B9364B91D1D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E33C687E-20B4-418D-859D-D25C57D64367}
+	EndGlobalSection
+EndGlobal
