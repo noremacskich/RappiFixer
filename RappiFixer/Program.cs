@@ -7,39 +7,52 @@ using System.Linq;
 
 namespace RappiFixer
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
 
-            if (!File.Exists(args[0]))
+            var allRecords = LoadInCSVFile(args[0]);
+
+            var uniqueRecords = allRecords
+                .GroupBy(x => x.order_id)
+                .Select(x => new OrderSummary() {
+                    OrderId = x.First().order_id,
+                    UserName = x.First().user,
+                    NumberOfProducts = x.Count(),
+                    Products = x.Select(x => x.product).ToList(),
+                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
+                }).ToList();
+
+            Console.WriteLine($"Succesfully read in the CSV file.  You had {uniqueRecords.Count()} orders with a total of {allRecords.Count} products sold for the dates {uniqueRecords.Min(x => x.date).ToLongDateString()} to {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
+
+            LookupRecords(uniqueRecords);
+
+            Console.WriteLine("Teee ammoo mariposa");
+            return;
+        }
+
+        private List<CSVHeaders> LoadInCSVFile(string fileLocation)
+        {
+
+            if (!File.Exists(fileLocation))
             {
                 Console.WriteLine("Unable to find the csv file");
-                return;
+                throw new FileNotFoundException("unable to find the csv file", fileLocation);
             }
 
-            using StreamReader reader = new StreamReader(args[0]);
+            using StreamReader reader = new StreamReader(fileLocation);
             using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             var records = csvReader.GetRecords<CSVHeaders>();
 
-            var allRecords = records.ToList();
+            return records.ToList();
+        }
 
-            var uniqueRecords = allRecords
-                .GroupBy(x => x.order_id)
-                .Select(x => new {
-                    orderId = x.First().order_id,
-                    userName = x.First().user,
-                    numberOfProducts = x.Count(),
-                    products = x.Select(x => x.product).ToList(),
-                    date = DateTime.Parse(x.First().created_at.Substring(0, 20))
-
-                }).ToList();
-
-
+        private void LookupRecords(List<OrderSummary> uniqueRecords)
+        {
             var lookingForNumbers = true;
 
-            Console.WriteLine($"Succesfully read in the CSV file.  You had {uniqueRecords.Count()} orders with a total of {allRecords.Count} products sold for the dates {uniqueRecords.Min(x => x.date).ToLongDateString()} to {uniqueRecords.Max(x => x.date).ToLongDateString()}");
             while (lookingForNumbers)
             {
                 Console.WriteLine("\r\nEnter Order Number.  Type \"exit\" to escape.");
@@ -47,7 +60,7 @@ namespace RappiFixer
 
                 input.Trim();
 
-                if(input == "exit")
+                if (input == "exit")
                 {
                     lookingForNumbers = false;
                     continue;
@@ -59,20 +72,18 @@ namespace RappiFixer
                     Console.WriteLine("you did not specify a order id, try again");
                 }
 
-                var lookedupUser = uniqueRecords.FirstOrDefault(x => x.orderId == orderId);
+                var lookedupUser = uniqueRecords.FirstOrDefault(x => x.OrderId == orderId);
 
-                if(lookedupUser == null)
+                if (lookedupUser == null)
                 {
                     Console.WriteLine("This order doesn't exist");
                     continue;
                 }
 
-                Console.WriteLine($"\r\nThis order was for {lookedupUser.userName}, and they had {lookedupUser.numberOfProducts} products : \r\n\r\n{string.Join("\r\n", lookedupUser.products)}");
+                Console.WriteLine($"\r\nThis order was for {lookedupUser.UserName}, and they had {lookedupUser.NumberOfProducts} products : \r\n\r\n{string.Join("\r\n", lookedupUser.Products)}");
 
             }
 
-            Console.WriteLine("Teee ammoo mariposa");
-            return;
         }
     }
 }
