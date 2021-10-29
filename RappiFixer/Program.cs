@@ -16,7 +16,7 @@ namespace RappiFixer
 
             rappi.StartApp(args);
 
-            return 1;
+            return;
         }
 
        
