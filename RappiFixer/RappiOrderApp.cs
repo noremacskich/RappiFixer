@@ -16,18 +16,48 @@ namespace RappiFixer
 
             var uniqueRecords = allRecords
                 .GroupBy(x => x.order_id)
-                .Select(x => new OrderSummary()
-                {
-                    OrderId = x.First().order_id,
-                    UserName = x.First().user,
-                    NumberOfProducts = x.Count(),
-                    Products = x.Select(x => x.product).ToList(),
-                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
-                }).ToList();
+                .ToList();
 
             Console.WriteLine($"Succesfully read in the CSV file.  You had {uniqueRecords.Count()} orders with a total of {allRecords.Count} products sold for the dates {uniqueRecords.Min(x => x.Date).ToLongDateString()} to {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
 
-            LookupRecords(uniqueRecords);
+            var inMenu = true;
+            while (inMenu)
+            {
+                Console.WriteLine("====================================");
+                Console.WriteLine("Please choose an option:");
+                Console.WriteLine(" 1: Lookup Orders");
+                Console.WriteLine(" 2: Get Sold Inventory");
+                Console.WriteLine(" 3: Exit");
+
+                var input = Console.ReadLine();
+
+                input.Trim();
+
+                long menuId;
+                if (!long.TryParse(input, out menuId))
+                {
+                    Console.WriteLine("Not a valid menu option, please try again.");
+                    continue;
+                }
+
+                var validIds = new List<long> { 1, 2, 3 };
+                if (!validIds.Contains(menuId))
+                {
+                    Console.WriteLine("You did not enter a valid menu number");
+                    continue;
+                }
+
+                switch (menuId)
+                {
+                    case 1: LookupRecords(allRecords); break;
+                    case 2: Console.WriteLine("This is your inventory"); break;
+                    case 3: inMenu = false; break;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+            }
 
             Console.WriteLine("Teee ammoo mariposa");
         }
@@ -49,8 +79,19 @@ namespace RappiFixer
             return records.ToList();
         }
 
-        private void LookupRecords(List<OrderSummary> uniqueRecords)
+        private void LookupRecords(List<CSVHeaders> allRecords)
         {
+            var uniqueRecords = allRecords
+                .GroupBy(x => x.order_id)
+                .Select(x => new OrderSummary()
+                {
+                    OrderId = x.First().order_id,
+                    UserName = x.First().user,
+                    NumberOfProducts = x.Count(),
+                    Products = x.Select(x => x.product).ToList(),
+                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
+                }).ToList();
+
             var lookingForNumbers = true;
 
             while (lookingForNumbers)
@@ -85,5 +126,6 @@ namespace RappiFixer
             }
 
         }
+
     }
 }
