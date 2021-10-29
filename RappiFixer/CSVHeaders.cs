@@ -11,6 +11,6 @@ namespace RappiFixer
         public string user { get; set; }
         public string created_at { get; set; }
         public string product { get; set; }
-        
+        public double product_total_price_with_discount { get; set; }
     }
 }

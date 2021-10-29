@@ -16,6 +16,10 @@ namespace RappiFixer
 
             var uniqueRecords = allRecords
                 .GroupBy(x => x.order_id)
+                .Select(x => new
+                {
+                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
+                })
                 .ToList();
 
             Console.WriteLine($"Succesfully read in the CSV file.  You had {uniqueRecords.Count()} orders with a total of {allRecords.Count} products sold for the dates {uniqueRecords.Min(x => x.Date).ToLongDateString()} to {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
@@ -50,7 +54,7 @@ namespace RappiFixer
                 switch (menuId)
                 {
                     case 1: LookupRecords(allRecords); break;
-                    case 2: Console.WriteLine("This is your inventory"); break;
+                    case 2: PrintOutInventory(allRecords); break;
                     case 3: inMenu = false; break;
                 }
 
@@ -127,5 +131,32 @@ namespace RappiFixer
 
         }
 
+        private void PrintOutInventory(List<CSVHeaders> allRecords)
+        {
+            var products = allRecords
+                .Where(x => x.state == "finished")
+                .GroupBy(x => x.product)
+                .Select(x => new 
+                {
+                    ProductName = x.First().product,
+                    Price = x.Sum(x => x.product_total_price_with_discount),
+                    Count = x.Count()                    
+                }).ToList();
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("==================================================================================");
+
+            foreach(var product in products)
+            {
+                Console.WriteLine($"{product.Count} \t {product.Price.ToString("c")} \t {product.ProductName}");
+            }
+
+
+            Console.WriteLine("==================================================================================");
+
+            Console.WriteLine($"\t {products.Sum(x => x.Price).ToString("c")}");
+
+        }
     }
 }
