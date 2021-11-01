@@ -40,6 +40,10 @@ namespace RappiFixer.UseCases
                 if (!long.TryParse(input, out orderId))
                 {
                     Console.WriteLine("you did not specify a order id, try again");
+                    Console.Beep();
+                    Console.Beep();
+                    Console.Beep();
+                    continue;
                 }
 
                 var lookedupUser = uniqueRecords.FirstOrDefault(x => x.OrderId == orderId);
@@ -47,9 +51,12 @@ namespace RappiFixer.UseCases
                 if (lookedupUser == null)
                 {
                     Console.WriteLine("This order doesn't exist");
+                    Console.Beep();
+                    Console.Beep();
                     continue;
                 }
 
+                Console.Beep();
                 Console.WriteLine($"\r\nThis order was for {lookedupUser.UserName}, and they had {lookedupUser.NumberOfProducts} products : \r\n\r\n{string.Join("\r\n", lookedupUser.Products)}");
 
             }
