@@ -29,9 +29,10 @@ namespace RappiFixer
             {
                 Console.WriteLine("====================================");
                 Console.WriteLine("Please choose an option:");
+                Console.WriteLine(" 0: Exit");
                 Console.WriteLine(" 1: Lookup Orders");
                 Console.WriteLine(" 2: Get Sold Inventory");
-                Console.WriteLine(" 3: Exit");
+
 
                 var menuId = ParseOption();
 
@@ -39,9 +40,9 @@ namespace RappiFixer
 
                 switch (menuId)
                 {
+                    case 0: inMenu = false; break;
                     case 1: LookupRecords(allRecords); break;
                     case 2: PrintOutInventory(allRecords); break;
-                    case 3: inMenu = false; break;
                 }
 
                 Console.WriteLine();
@@ -65,7 +66,7 @@ namespace RappiFixer
                 return -1;
             }
 
-            var validIds = new List<long> { 1, 2, 3 };
+            var validIds = new List<long> { 0, 1, 2 };
             if (!validIds.Contains(menuId))
             {
                 Console.WriteLine("You did not enter a valid menu number");
