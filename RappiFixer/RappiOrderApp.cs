@@ -32,6 +32,7 @@ namespace RappiFixer
                 Console.WriteLine(" 0: Exit");
                 Console.WriteLine(" 1: Lookup Orders");
                 Console.WriteLine(" 2: Get Sold Inventory");
+                Console.WriteLine(" 3: Checkout Item");
 
 
                 var menuId = ParseOption();
@@ -43,6 +44,7 @@ namespace RappiFixer
                     case 0: inMenu = false; break;
                     case 1: LookupRecords(allRecords); break;
                     case 2: PrintOutInventory(allRecords); break;
+                    case 3: CheckoutItem(); break;
                 }
 
                 Console.WriteLine();
@@ -51,6 +53,24 @@ namespace RappiFixer
             }
 
             Console.WriteLine("Teee ammoo mariposa");
+        }
+
+        private void CheckoutItem()
+        {
+            Console.WriteLine("\r\nScan barcode to add item to sold list.  Type \"exit\" to escape.");
+            var input = Console.ReadLine();
+            input.Trim();
+            
+            // Lookup sku number to see if it already exists
+
+                // If so, display it
+
+            // If not, ask to put it back into the system
+
+            // Ask for quantity sold
+
+            // Update csv
+
         }
 
         private long ParseOption()
@@ -66,7 +86,7 @@ namespace RappiFixer
                 return -1;
             }
 
-            var validIds = new List<long> { 0, 1, 2 };
+            var validIds = new List<long> { 0, 1, 2, 3 };
             if (!validIds.Contains(menuId))
             {
                 Console.WriteLine("You did not enter a valid menu number");
