@@ -33,23 +33,9 @@ namespace RappiFixer
                 Console.WriteLine(" 2: Get Sold Inventory");
                 Console.WriteLine(" 3: Exit");
 
-                var input = Console.ReadLine();
+                var menuId = ParseOption();
 
-                input.Trim();
-
-                long menuId;
-                if (!long.TryParse(input, out menuId))
-                {
-                    Console.WriteLine("Not a valid menu option, please try again.");
-                    continue;
-                }
-
-                var validIds = new List<long> { 1, 2, 3 };
-                if (!validIds.Contains(menuId))
-                {
-                    Console.WriteLine("You did not enter a valid menu number");
-                    continue;
-                }
+                if (menuId == -1) continue;
 
                 switch (menuId)
                 {
@@ -64,6 +50,29 @@ namespace RappiFixer
             }
 
             Console.WriteLine("Teee ammoo mariposa");
+        }
+
+        private long ParseOption()
+        {
+            var input = Console.ReadLine();
+
+            input.Trim();
+
+            long menuId;
+            if (!long.TryParse(input, out menuId))
+            {
+                Console.WriteLine("Not a valid menu option, please try again.");
+                return -1;
+            }
+
+            var validIds = new List<long> { 1, 2, 3 };
+            if (!validIds.Contains(menuId))
+            {
+                Console.WriteLine("You did not enter a valid menu number");
+                return -1;
+            }
+
+            return menuId;
         }
 
         private List<CSVHeaders> LoadInCSVFile(string fileLocation)
