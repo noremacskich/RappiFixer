@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RappiFixer
+namespace RappiFixer.Models
 {
     public class OrderSummary
     {

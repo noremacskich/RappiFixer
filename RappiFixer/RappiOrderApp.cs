@@ -1,10 +1,11 @@
 ﻿using CsvHelper;
+using RappiFixer.Models;
+using RappiFixer.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace RappiFixer
 {
@@ -42,8 +43,8 @@ namespace RappiFixer
                 switch (menuId)
                 {
                     case 0: inMenu = false; break;
-                    case 1: LookupRecords(allRecords); break;
-                    case 2: PrintOutInventory(allRecords); break;
+                    case 1: LookupOrdersUseCase.LookupRecords(allRecords); break;
+                    case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords); break;
                     case 3: CheckoutItem(); break;
                 }
 
@@ -113,80 +114,8 @@ namespace RappiFixer
             return records.ToList();
         }
 
-        private void LookupRecords(List<CSVHeaders> allRecords)
-        {
-            var uniqueRecords = allRecords
-                .GroupBy(x => x.order_id)
-                .Select(x => new OrderSummary()
-                {
-                    OrderId = x.First().order_id,
-                    UserName = x.First().user,
-                    NumberOfProducts = x.Count(),
-                    Products = x.Select(x => x.product).ToList(),
-                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
-                }).ToList();
-
-            var lookingForNumbers = true;
-
-            while (lookingForNumbers)
-            {
-                Console.WriteLine("\r\nEnter Order Number.  Type \"exit\" to escape.");
-                var input = Console.ReadLine();
-
-                input.Trim();
-
-                if (input == "exit")
-                {
-                    lookingForNumbers = false;
-                    continue;
-                }
-
-                long orderId;
-                if (!long.TryParse(input, out orderId))
-                {
-                    Console.WriteLine("you did not specify a order id, try again");
-                }
-
-                var lookedupUser = uniqueRecords.FirstOrDefault(x => x.OrderId == orderId);
-
-                if (lookedupUser == null)
-                {
-                    Console.WriteLine("This order doesn't exist");
-                    continue;
-                }
-
-                Console.WriteLine($"\r\nThis order was for {lookedupUser.UserName}, and they had {lookedupUser.NumberOfProducts} products : \r\n\r\n{string.Join("\r\n", lookedupUser.Products)}");
-
-            }
-
-        }
-
-        private void PrintOutInventory(List<CSVHeaders> allRecords)
-        {
-            var products = allRecords
-                .Where(x => x.state == "finished")
-                .GroupBy(x => x.product)
-                .Select(x => new 
-                {
-                    ProductName = x.First().product,
-                    Price = x.Sum(x => x.product_total_price_with_discount),
-                    Count = x.Count()                    
-                }).ToList();
-
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("==================================================================================");
-
-            foreach(var product in products)
-            {
-                Console.WriteLine($"{product.Count} \t {product.Price.ToString("c")} \t {product.ProductName}");
-            }
+        
 
 
-            Console.WriteLine("==================================================================================");
-
-            Console.WriteLine($"\t {products.Sum(x => x.Price).ToString("c")}");
-
-        }
     }
 }
