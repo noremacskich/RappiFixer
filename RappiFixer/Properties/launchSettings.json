@@ -2,7 +2,7 @@
   "profiles": {
     "RappiFixer": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\NoremacSkich\\Desktop\\Rappi OCR Scanner\\partner_113_159953755.csv\""
+      "commandLineArgs": "\"C:\\Users\\NoremacSkich\\Desktop\\Rappi OCR Scanner\\partner_113_159953755.csv\" \"C:\\Users\\NoremacSkich\\Desktop\\Rappi OCR Scanner\\Product_Cost.csv\""
     }
   }
 }

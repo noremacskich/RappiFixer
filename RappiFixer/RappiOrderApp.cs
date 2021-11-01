@@ -14,6 +14,7 @@ namespace RappiFixer
         public void StartApp(string[] args)
         {
             var allRecords = LoadInCSVFile(args[0]);
+            var productCosts = LoadInProductCostsCSV(args[1]);
 
             var uniqueRecords = allRecords
                 .GroupBy(x => x.order_id)
@@ -33,7 +34,6 @@ namespace RappiFixer
                 Console.WriteLine(" 0: Exit");
                 Console.WriteLine(" 1: Lookup Orders");
                 Console.WriteLine(" 2: Get Sold Inventory");
-                Console.WriteLine(" 3: Checkout Item");
 
 
                 var menuId = ParseOption();
@@ -44,8 +44,7 @@ namespace RappiFixer
                 {
                     case 0: inMenu = false; break;
                     case 1: LookupOrdersUseCase.LookupRecords(allRecords); break;
-                    case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords); break;
-                    case 3: CheckoutItem(); break;
+                    case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
                 }
 
                 Console.WriteLine();
@@ -54,24 +53,6 @@ namespace RappiFixer
             }
 
             Console.WriteLine("Teee ammoo mariposa");
-        }
-
-        private void CheckoutItem()
-        {
-            Console.WriteLine("\r\nScan barcode to add item to sold list.  Type \"exit\" to escape.");
-            var input = Console.ReadLine();
-            input.Trim();
-            
-            // Lookup sku number to see if it already exists
-
-                // If so, display it
-
-            // If not, ask to put it back into the system
-
-            // Ask for quantity sold
-
-            // Update csv
-
         }
 
         private long ParseOption()
@@ -114,7 +95,24 @@ namespace RappiFixer
             return records.ToList();
         }
 
-        
+
+        private List<ProductCost> LoadInProductCostsCSV(string fileLocation)
+        {
+
+            if (!File.Exists(fileLocation))
+            {
+                Console.WriteLine("Unable to find the csv file");
+                throw new FileNotFoundException("unable to find the csv file", fileLocation);
+            }
+
+            using StreamReader reader = new StreamReader(fileLocation);
+            using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var records = csvReader.GetRecords<ProductCost>();
+
+            return records.ToList();
+        }
+
 
 
     }
