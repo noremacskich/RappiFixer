@@ -26,13 +26,13 @@ namespace RappiFixer.UseCases
 
             foreach (var product in products)
             {
-                Console.WriteLine($"{product.Count} \t {product.Price.ToString("c")} \t {product.ProductName}");
+                Console.WriteLine($"{product.Count} \t {product.Price:c} \t {product.ProductName}");
             }
 
 
             Console.WriteLine("==================================================================================");
 
-            Console.WriteLine($"\t {products.Sum(x => x.Price).ToString("c")}");
+            Console.WriteLine($"\t {products.Sum(x => x.Price):c}");
 
         }
     }
