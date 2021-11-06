@@ -39,7 +39,7 @@ namespace RappiFixer
                 switch (menuId)
                 {
                     case 0: inMenu = false; break;
-                    case 1: LookupOrdersUseCase.LookupRecords(allRecords); break;
+                    case 1: LookupOrdersUseCase.LookupRecords(allRecords, productCosts); break;
                     case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
                 }
 

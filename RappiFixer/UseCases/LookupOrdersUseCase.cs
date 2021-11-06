@@ -1,4 +1,5 @@
-﻿using RappiFixer.Models;
+﻿using RappiFixer.Helpers;
+using RappiFixer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace RappiFixer.UseCases
 {
     public class LookupOrdersUseCase
     {
-        internal static void LookupRecords(List<CSVHeaders> allRecords)
+        internal static void LookupRecords(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
         {
             var uniqueRecords = allRecords
                 .GroupBy(x => x.order_id)
@@ -62,12 +63,10 @@ namespace RappiFixer.UseCases
                 Console.WriteLine();
                 Console.WriteLine($"Nombre : {lookedupUser.UserName}");
                 Console.WriteLine($"Order Status : {lookedupUser.Status}");
-                Console.WriteLine("=====================================================");
-                Console.WriteLine($"{string.Join("\r\n", lookedupUser.Products)}");
-                Console.WriteLine("=====================================================");
 
-                Console.WriteLine();
-                Console.WriteLine();
+                var userProducts = allRecords.Where(x => x.order_id == orderId).ToList();
+                ProfitHelper.PrintOutProfits(userProducts, productCosts);
+
 
             }
 
