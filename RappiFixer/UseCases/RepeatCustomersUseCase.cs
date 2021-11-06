@@ -16,7 +16,9 @@ namespace RappiFixer.UseCases
                 .Select(x => new
                 {
                     name = x.First().user,
-                    NumberOfOrders = x.GroupBy(x => x.order_id).Count()
+                    NumberOfOrders = x.GroupBy(x => x.order_id).Count(),
+                    FirstOrderDate = x.Min(y => DateTime.Parse(y.created_at.Substring(0, 20))),
+                    LastOrderDate = x.Max(y => DateTime.Parse(y.created_at.Substring(0, 20)))
                 });
 
 
@@ -26,6 +28,7 @@ namespace RappiFixer.UseCases
                 Console.WriteLine();
                 Console.WriteLine($"Nombre : {customer.name}");
                 Console.WriteLine($"Numero de ordenes : {customer.NumberOfOrders}");
+                Console.WriteLine($"Cliente activa entre : {customer.FirstOrderDate.ToLongDateString()} - {customer.LastOrderDate.ToLongDateString()}");
                 Console.WriteLine("Preferencias del cliente");
 
 
