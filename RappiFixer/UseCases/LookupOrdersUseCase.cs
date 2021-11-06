@@ -17,6 +17,7 @@ namespace RappiFixer.UseCases
                     OrderId = x.First().order_id,
                     UserName = x.First().user,
                     NumberOfProducts = x.Count(),
+                    Status = x.First().state,
                     Products = x.Select(x => x.product).ToList(),
                     Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
                 }).ToList();
@@ -57,7 +58,16 @@ namespace RappiFixer.UseCases
                 }
 
                 Console.Beep();
-                Console.WriteLine($"\r\nThis order was for {lookedupUser.UserName}, and they had {lookedupUser.NumberOfProducts} products : \r\n\r\n{string.Join("\r\n", lookedupUser.Products)}");
+
+                Console.WriteLine();
+                Console.WriteLine($"Nombre : {lookedupUser.UserName}");
+                Console.WriteLine($"Order Status : {lookedupUser.Status}");
+                Console.WriteLine("=====================================================");
+                Console.WriteLine($"{string.Join("\r\n", lookedupUser.Products)}");
+                Console.WriteLine("=====================================================");
+
+                Console.WriteLine();
+                Console.WriteLine();
 
             }
 
