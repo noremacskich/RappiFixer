@@ -16,7 +16,7 @@ namespace RappiFixer.Helpers
                     ProductName = x.First().product,
                     Cost = x.Sum(x => x.product_total_price_with_discount),
                     Count = x.Sum(x => x.product_units),
-                    Profit = (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(x.First().product, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * x.Count()
+                    Profit = (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(x.First().product, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * x.Sum(x => x.product_units)
                 }).ToList();
 
 
