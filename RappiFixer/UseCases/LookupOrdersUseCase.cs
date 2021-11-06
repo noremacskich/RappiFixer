@@ -27,12 +27,12 @@ namespace RappiFixer.UseCases
 
             while (lookingForNumbers)
             {
-                Console.WriteLine("\r\nEnter Order Number.  Type \"exit\" to escape.");
+                Console.WriteLine("\r\nIngrese el número de pedido. Escriba \"salir\" para escapar.");
                 var input = Console.ReadLine();
 
                 input.Trim();
 
-                if (input == "exit")
+                if (input == "salir")
                 {
                     lookingForNumbers = false;
                     continue;
@@ -41,7 +41,7 @@ namespace RappiFixer.UseCases
                 long orderId;
                 if (!long.TryParse(input, out orderId))
                 {
-                    Console.WriteLine("you did not specify a order id, try again");
+                    Console.WriteLine("No especificó un ID de pedido, inténtelo de nuevo");
                     Console.Beep();
                     Console.Beep();
                     Console.Beep();
@@ -52,7 +52,7 @@ namespace RappiFixer.UseCases
 
                 if (lookedupUser == null)
                 {
-                    Console.WriteLine("This order doesn't exist");
+                    Console.WriteLine("Esta orden no existe");
                     Console.Beep();
                     Console.Beep();
                     continue;
@@ -61,8 +61,8 @@ namespace RappiFixer.UseCases
                 Console.Beep();
 
                 Console.WriteLine();
-                Console.WriteLine($"Nombre : {lookedupUser.UserName}");
-                Console.WriteLine($"Order Status : {lookedupUser.Status}");
+                Console.WriteLine($"Nombre             : {lookedupUser.UserName}");
+                Console.WriteLine($"Estado de la orden : {lookedupUser.Status}");
 
                 var userProducts = allRecords.Where(x => x.order_id == orderId).ToList();
                 ProfitHelper.PrintOutProfits(userProducts, productCosts);

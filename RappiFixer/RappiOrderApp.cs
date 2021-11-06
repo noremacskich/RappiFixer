@@ -20,16 +20,16 @@ namespace RappiFixer
                 })
                 .ToList();
 
-            Console.WriteLine($"Succesfully read in the CSV file.  You had {uniqueRecords.Count()} orders with a total of {allRecords.Count} products sold for the dates {uniqueRecords.Min(x => x.Date).ToLongDateString()} to {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
+            Console.WriteLine($"Tuvo {uniqueRecords.Count()} pedidos con un total de {allRecords.Count} productos vendidos para las fechas del {uniqueRecords.Min(x => x.Date).ToLongDateString()} al {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
 
             var inMenu = true;
             while (inMenu)
             {
                 Console.WriteLine("====================================");
-                Console.WriteLine("Please choose an option:");
-                Console.WriteLine(" 0: Exit");
-                Console.WriteLine(" 1: Lookup Orders");
-                Console.WriteLine(" 2: Get Sold Inventory");
+                Console.WriteLine("Por favor, elija una opción:");
+                Console.WriteLine(" 0: Salida");
+                Console.WriteLine(" 1: Órdenes de búsqueda");
+                Console.WriteLine(" 2: Obtener inventario vendido");
 
 
                 var menuId = ParseOption();
@@ -60,14 +60,14 @@ namespace RappiFixer
             long menuId;
             if (!long.TryParse(input, out menuId))
             {
-                Console.WriteLine("Not a valid menu option, please try again.");
+                Console.WriteLine("No es una opción de menú válida, inténtelo de nuevo.");
                 return -1;
             }
 
             var validIds = new List<long> { 0, 1, 2, 3 };
             if (!validIds.Contains(menuId))
             {
-                Console.WriteLine("You did not enter a valid menu number");
+                Console.WriteLine("No ingresaste un número de menú válido");
                 return -1;
             }
 
