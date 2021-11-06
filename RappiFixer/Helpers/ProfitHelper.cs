@@ -20,10 +20,12 @@ namespace RappiFixer.Helpers
                 }).ToList();
 
 
-            Console.WriteLine("==================================================================================");
-
             const int costSpacing = 12;
-            const int countSpacing = 4;
+            const int countSpacing = 9;
+
+            Console.WriteLine("==================================================================================");
+            Console.WriteLine($"{"Cantidad",countSpacing} {"Costo",costSpacing} {"Lucro",costSpacing} \t Nombre");
+            Console.WriteLine("==================================================================================");
 
             foreach (var product in products.OrderByDescending(x => x.Count).ThenBy(x => x.ProductName))
             {
