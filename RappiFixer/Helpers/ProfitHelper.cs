@@ -25,7 +25,7 @@ namespace RappiFixer.Helpers
             const int costSpacing = 12;
             const int countSpacing = 4;
 
-            foreach (var product in products)
+            foreach (var product in products.OrderByDescending(x => x.Count).ThenBy(x => x.ProductName))
             {
                 Console.WriteLine($"{product.Count,countSpacing} {product.Cost,costSpacing:C} {product.Profit,costSpacing:C} \t {product.ProductName}");
             }
