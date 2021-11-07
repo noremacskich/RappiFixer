@@ -12,7 +12,9 @@ namespace RappiFixer.UseCases
         internal static void PrintOutRepeatCustomers(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
         {
 
-            var repeatCustomers = allRecords.GroupBy(x => new { x.user })
+            var repeatCustomers = allRecords
+                .Where(x => x.state == "finished")
+                .GroupBy(x => new { x.user })
                 .Select(x => new
                 {
                     name = x.First().user,
