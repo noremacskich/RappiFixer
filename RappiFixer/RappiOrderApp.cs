@@ -30,7 +30,8 @@ namespace RappiFixer
                 Console.WriteLine(" 0: Salida");
                 Console.WriteLine(" 1: Órdenes de búsqueda");
                 Console.WriteLine(" 2: Obtener inventario vendido");
-                Console.WriteLine(" 3: Clientes repetidos");
+                Console.WriteLine(" 3: Obtener inventario cancelado");
+                Console.WriteLine(" 4: Clientes repetidos");
 
 
                 var menuId = ParseOption();
@@ -42,7 +43,8 @@ namespace RappiFixer
                     case 0: inMenu = false; break;
                     case 1: LookupOrdersUseCase.LookupRecords(allRecords, productCosts); break;
                     case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
-                    case 3: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
+                    case 3: PrintOutCanceledInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
+                    case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
                 }
 
                 Console.WriteLine();
