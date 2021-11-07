@@ -7,7 +7,7 @@ using System.Text;
 
 namespace RappiFixer.UseCases
 {
-    public static class PrintOutCanceledInventoryUseCase
+    public static class PrintOutCanceledOrdersUseCase
     {
         internal static void PrintOutInventory(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
         {

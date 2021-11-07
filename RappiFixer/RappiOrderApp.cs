@@ -62,7 +62,7 @@ namespace RappiFixer
                     case 0: inMenu = false; break;
                     case 1: LookupOrdersUseCase.LookupRecords(allRecords, productCosts); break;
                     case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
-                    case 3: PrintOutCanceledInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
+                    case 3: PrintOutCanceledOrdersUseCase.PrintOutInventory(allRecords, productCosts); break;
                     case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(allRecords, productCosts); break;
                 }
