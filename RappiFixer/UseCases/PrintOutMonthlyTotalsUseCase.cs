@@ -39,7 +39,7 @@ namespace RappiFixer.UseCases
             CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
             DayOfWeek myFirstDOW = myCI.DateTimeFormat.FirstDayOfWeek;
 
-
+            
             var numberOfCalendarWeeks = (myCal.GetWeekOfYear(endDate, myCWR, myFirstDOW) - myCal.GetWeekOfYear(startDate, myCWR, myFirstDOW)) + 1;
 
             var calendar = new CalendarDay[numberOfCalendarWeeks, 7];
@@ -82,33 +82,8 @@ namespace RappiFixer.UseCases
                 firstDayInFirstWeek = firstDayInFirstWeek.AddDays(1);
             }
 
-            var goo = 1;
 
-            //while (startDate <= endDate)
-            //{
-            //    var date = startDate.ToLongDateString();
-            //    var numberOfOrders = 0;
-            //    double profit = 0;
-            //    double cost = 0;
-
-            //    var lookedUpDate = calendarDays.FirstOrDefault(x => x.OrderDate.Date == startDate.Date);
-
-            //    if (lookedUpDate != null)
-            //    {
-            //        numberOfOrders = lookedUpDate.NumberOfOrders;
-            //        profit = lookedUpDate.Profit;
-            //        cost = lookedUpDate.Cost;
-            //    }
-
-            //    Console.WriteLine($"Date : {date}");
-            //    Console.WriteLine($"Number Of Orders : {numberOfOrders}");
-            //    Console.WriteLine($"Cost : {cost:c}");
-            //    Console.WriteLine($"Profit : {profit:c}");
-            //    Console.WriteLine();
-            //    Console.WriteLine();
-
-            //    startDate = startDate.AddDays(1);
-            //}
+            PrintOutCalendar(calendar, numberOfCalendarWeeks);
 
 
 
@@ -120,6 +95,85 @@ namespace RappiFixer.UseCases
             public int NumberOfOrders { get; set; }
             public double Profit { get; set; }
             public double Cost { get; set; }
+        }
+
+        private static void PrintOutCalendar(CalendarDay[,] calendarRow, int totalWeeks)
+        {
+            const int calenderCellWidth = 14;
+            const int daysInWeek = 7;
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+
+
+            var weekDayHeaders = GetLocalizedDayOfWeekValues(CultureInfo.CurrentCulture);
+
+            for (var day = 0; day < daysInWeek; day++)
+            {
+                Console.Write($" {weekDayHeaders[day].CenterString(calenderCellWidth)}");
+            }
+
+            Console.WriteLine();
+            for (var week = 0; week < totalWeeks; week++)
+            {
+                Console.WriteLine(new String('-', (calenderCellWidth + 1) * daysInWeek + 1));
+
+                for(var day = 0; day < daysInWeek; day++)
+                {
+                    Console.Write($"|{calendarRow[week, day].Day.Day.ToString().CenterString(calenderCellWidth)}");
+                }
+
+                Console.WriteLine("|");
+
+                Console.WriteLine(new String('-', (calenderCellWidth + 1) * daysInWeek + 1));
+
+                for (var day = 0; day < daysInWeek; day++)
+                {
+                    Console.Write($"|{calendarRow[week, day].NumberOfOrders,-calenderCellWidth}");
+                }
+
+                Console.WriteLine("|");
+
+                for (var day = 0; day < daysInWeek; day++)
+                {
+                    Console.Write($"|{calendarRow[week, day].Cost,calenderCellWidth:c}");
+                }
+
+                Console.WriteLine("|");
+
+                for (var day = 0; day < daysInWeek; day++)
+                {
+                    Console.Write($"|{calendarRow[week, day].Profit,calenderCellWidth:c}");
+                }
+
+                Console.WriteLine("|");
+
+            }
+
+            Console.WriteLine(new String('-', (calenderCellWidth + 1) * daysInWeek + 1));
+
+
+        }
+
+
+        public static List<String> GetLocalizedDayOfWeekValues(CultureInfo culture)
+        {
+            return GetLocalizedDayOfWeekValues(culture, culture.DateTimeFormat.FirstDayOfWeek);
+        }
+
+        public static List<String> GetLocalizedDayOfWeekValues(CultureInfo culture, DayOfWeek startDay)
+        {
+            string[] dayNames = culture.DateTimeFormat.DayNames;
+            IEnumerable<string> query = dayNames
+                .Skip((int)startDay)
+                .Concat(
+                    dayNames.Take((int)startDay)
+                );
+
+            return query.ToList();
         }
 
     }
