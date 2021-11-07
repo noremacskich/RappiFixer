@@ -17,7 +17,7 @@ namespace RappiFixer
 
             string rappiFileLocation = Environment.CurrentDirectory + "\\Rappi.csv";
             string productCostsFileLocation = Environment.CurrentDirectory + "\\Costo.csv";
-            if (args != null && args.Length == 1)
+            if (args != null && args.Length >= 1)
             {
                 rappiFileLocation = args[0];
             }

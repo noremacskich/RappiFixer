@@ -13,7 +13,6 @@ namespace RappiFixer.UseCases
     {
         internal static List<ProductCost> LoadInProductCostsCSV(string fileLocation)
         {
-
             if (!File.Exists(fileLocation))
             {
                 throw new FileNotFoundException("No se puede encontrar el archivo \"Costo.csv\"", fileLocation);
@@ -23,26 +22,14 @@ namespace RappiFixer.UseCases
             using (var reader = new StreamReader(fileLocation, utf8NoBom))
             {
                 reader.Read();
-                if (Equals(reader.CurrentEncoding, utf8NoBom))
-                {
-                    //Console.WriteLine("No BOM");
-                    using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-                    var records = csvReader.GetRecords<ProductCost>();
-                    return records.ToList();
-                }
-                else
+                using var csvReader = new CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.CurrentCulture)
                 {
-                    //Console.WriteLine("BOM detected");
-
-                    using var csvReader = new CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.CurrentCulture)
-                    {
-                        Delimiter = ";",
-                        Encoding = GetEncoding(fileLocation)
-                    });
-                    var records = csvReader.GetRecords<ProductCost>();
-                    return records.ToList();
-                }
+                    Delimiter = ";",
+                    Encoding = GetEncoding(fileLocation)
+                });
+                var records = csvReader.GetRecords<ProductCost>();
+                return records.ToList();
             }
 
         }
