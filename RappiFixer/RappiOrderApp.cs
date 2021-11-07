@@ -51,6 +51,7 @@ namespace RappiFixer
                 Console.WriteLine(" 3: Obtener inventario cancelado");
                 Console.WriteLine(" 4: Clientes repetidos");
                 Console.WriteLine(" 5: Ganancia diaria");
+                Console.WriteLine(" 6: Vista de calendario");
 
 
                 var menuId = ParseOption();
@@ -65,6 +66,7 @@ namespace RappiFixer
                     case 3: PrintOutCanceledOrdersUseCase.PrintOutInventory(allRecords, productCosts); break;
                     case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(allRecords, productCosts); break;
+                    case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(allRecords, productCosts); break;
                 }
 
                 Console.WriteLine();
@@ -88,7 +90,7 @@ namespace RappiFixer
                 return -1;
             }
 
-            var validIds = new List<long> { 0, 1, 2, 3, 4, 5 };
+            var validIds = new List<long> { 0, 1, 2, 3, 4, 5, 6 };
             if (!validIds.Contains(menuId))
             {
                 Console.WriteLine("No ingresaste un número de menú válido");
