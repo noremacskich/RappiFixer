@@ -9,8 +9,26 @@ namespace RappiFixer
     {
         public void StartApp(string[] args)
         {
-            var allRecords = LoadInRappiCSVFileUseCase.LoadInCSVFile(args[0]);
-            var productCosts = LoadInProductCostsUseCase.LoadInProductCostsCSV(args[1]);
+            if(args == null || args.Length == 0)
+            {
+                Console.WriteLine("De forma predeterminada, buscará el archivo que descargó de Rappi como \"Rappi.csv\".");
+                Console.WriteLine("De forma predeterminada, buscará el archivo con todos los precios como \"Costo.csv\".");
+            }
+
+            string rappiFileLocation = AppDomain.CurrentDomain.BaseDirectory + "Rappi.csv";
+            string productCostsFileLocation = AppDomain.CurrentDomain.BaseDirectory + "Products Cost.csv";
+            if (args != null && args.Length == 1)
+            {
+                rappiFileLocation = args[0];
+            }
+
+            if (args != null && args.Length == 2)
+            {
+                productCostsFileLocation = args[1];
+            }
+
+            var allRecords = LoadInRappiCSVFileUseCase.LoadInCSVFile(rappiFileLocation);
+            var productCosts = LoadInProductCostsUseCase.LoadInProductCostsCSV(productCostsFileLocation);
 
             var uniqueRecords = allRecords
                 .GroupBy(x => x.order_id)

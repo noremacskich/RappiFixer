@@ -15,8 +15,9 @@ namespace RappiFixer.UseCases
 
             if (!File.Exists(fileLocation))
             {
-                Console.WriteLine("Unable to find the csv file");
-                throw new FileNotFoundException("unable to find the csv file", fileLocation);
+                Console.WriteLine("No se puede encontrar el archivo \"Rappi.csv\"");
+
+                throw new FileNotFoundException("unable to load in the rappi file", fileLocation);
             }
 
             using StreamReader reader = new StreamReader(fileLocation);

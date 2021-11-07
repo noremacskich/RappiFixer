@@ -16,8 +16,8 @@ namespace RappiFixer.UseCases
 
             if (!File.Exists(fileLocation))
             {
-                Console.WriteLine("Unable to find the csv file");
-                throw new FileNotFoundException("unable to find the csv file", fileLocation);
+                Console.WriteLine("No se puede encontrar el archivo \"Costo.csv\"");
+                throw new FileNotFoundException("unable to find cost file", fileLocation);
             }
 
             var utf8NoBom = new UTF8Encoding(false);
