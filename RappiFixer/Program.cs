@@ -11,14 +11,25 @@ namespace RappiFixer
     {
         public static void Main(string[] args)
         {
+            try
+            {
+                var rappi = new RappiOrderApp();
 
-            var rappi = new RappiOrderApp();
+                rappi.StartApp(args);
 
-            rappi.StartApp(args);
+
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                Console.WriteLine("Pulse cualquier tecla para continuar");
+                Console.ReadKey();
+            }
 
             return;
+
         }
 
-       
+
     }
 }

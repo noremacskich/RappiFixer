@@ -15,8 +15,8 @@ namespace RappiFixer
                 Console.WriteLine("De forma predeterminada, buscará el archivo con todos los precios como \"Costo.csv\".");
             }
 
-            string rappiFileLocation = AppDomain.CurrentDomain.BaseDirectory + "Rappi.csv";
-            string productCostsFileLocation = AppDomain.CurrentDomain.BaseDirectory + "Products Cost.csv";
+            string rappiFileLocation = Environment.CurrentDirectory + "\\Rappi.csv";
+            string productCostsFileLocation = Environment.CurrentDirectory + "\\Costo.csv";
             if (args != null && args.Length == 1)
             {
                 rappiFileLocation = args[0];
