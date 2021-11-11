@@ -27,10 +27,6 @@ namespace RappiFixer.UseCases
                     NumberOfOrders = x.GroupBy(x => x.order_id).Count()
                 });
 
-
-            var startDate = calendarDays.Min(x => x.OrderDate);
-            var endDate = calendarDays.Max(x => x.OrderDate);
-
             // Gets the Calendar instance associated with a CultureInfo.
             CultureInfo myCI = CultureInfo.CurrentCulture;
             Calendar myCal = myCI.Calendar;
@@ -39,27 +35,28 @@ namespace RappiFixer.UseCases
             CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
             DayOfWeek myFirstDOW = myCI.DateTimeFormat.FirstDayOfWeek;
 
-            
+            var startDate = calendarDays.Min(x => x.OrderDate);
+            var endDate = calendarDays.Max(x => x.OrderDate);
+
+            startDate = startDate.StartOfWeek(myFirstDOW);
+            endDate = endDate.StartOfWeek(myFirstDOW).AddDays(7);
+
             var numberOfCalendarWeeks = (myCal.GetWeekOfYear(endDate, myCWR, myFirstDOW) - myCal.GetWeekOfYear(startDate, myCWR, myFirstDOW)) + 1;
 
             var calendar = new CalendarDay[numberOfCalendarWeeks, 7];
 
 
-            var firstDayInFirstWeek = startDate.StartOfWeek(myFirstDOW);
-
-
             var calendarWeekDayIndex = 0;
             var calendarWeekIndex = 0;
 
-            while (firstDayInFirstWeek <= endDate)
+            while (startDate <= endDate)
             {
                 var calendarDay = new CalendarDay()
                 {
-                    Day = firstDayInFirstWeek
+                    Day = startDate
                 };
 
-
-                var lookedUpDate = calendarDays.FirstOrDefault(x => x.OrderDate.Date == firstDayInFirstWeek.Date);
+                var lookedUpDate = calendarDays.FirstOrDefault(x => x.OrderDate.Date == startDate.Date);
 
                 if (lookedUpDate != null)
                 {
@@ -68,22 +65,23 @@ namespace RappiFixer.UseCases
                     calendarDay.Cost = lookedUpDate.Cost;
                 }
 
-
                 calendar[calendarWeekIndex, calendarWeekDayIndex] = calendarDay;
-
+                
                 calendarWeekDayIndex++;
 
-                if(calendarWeekDayIndex % 7 == 0)
+                
+
+                if(calendarWeekDayIndex % 7 == 0 && startDate != endDate)
                 {
                     calendarWeekDayIndex = 0;
                     calendarWeekIndex++;
                 }
 
-                firstDayInFirstWeek = firstDayInFirstWeek.AddDays(1);
+                startDate = startDate.AddDays(1);
             }
 
 
-            PrintOutCalendar(calendar, numberOfCalendarWeeks);
+            PrintOutCalendar(calendar, calendarWeekIndex);
 
 
 
@@ -105,9 +103,6 @@ namespace RappiFixer.UseCases
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-
-
-
 
             var weekDayHeaders = GetLocalizedDayOfWeekValues(CultureInfo.CurrentCulture);
 
