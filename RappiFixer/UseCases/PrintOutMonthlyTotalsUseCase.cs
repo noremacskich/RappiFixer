@@ -21,7 +21,7 @@ namespace RappiFixer.UseCases
                 {
                     OrderDate = x.Key,
                     Count = x.Sum(x => x.product_units),
-                    Profit = (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(x.First().product, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * x.Sum(x => x.product_units),
+                    Profit = x.ToList().Sum(a => (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(a.product, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * a.product_units),
                     Cost = x.Sum(x => x.product_total_price_with_discount),
                     AllOrderItems = x.ToList(),
                     NumberOfOrders = x.GroupBy(x => x.order_id).Count()
