@@ -11,6 +11,9 @@ namespace RappiFixer.UseCases
     public class PrintOutMonthlyTotalsUseCase
     {
 
+        const int calenderCellWidth = 14;
+
+
         internal static void PrintOutMonthlyTotals(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
         {
 
@@ -35,11 +38,13 @@ namespace RappiFixer.UseCases
             CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
             DayOfWeek myFirstDOW = myCI.DateTimeFormat.FirstDayOfWeek;
 
-            var startDate = calendarDays.Min(x => x.OrderDate);
-            var endDate = calendarDays.Max(x => x.OrderDate);
 
-            startDate = startDate.StartOfWeek(myFirstDOW);
-            endDate = endDate.StartOfWeek(myFirstDOW).AddDays(7);
+            var originalStartDate = calendarDays.Min(x => x.OrderDate);
+            var originalEndDate = calendarDays.Max(x => x.OrderDate);
+
+
+            var startDate = originalStartDate.StartOfWeek(myFirstDOW);
+            var endDate = originalEndDate.StartOfWeek(myFirstDOW).AddDays(7);
 
             var numberOfCalendarWeeks = (myCal.GetWeekOfYear(endDate, myCWR, myFirstDOW) - myCal.GetWeekOfYear(startDate, myCWR, myFirstDOW)) + 1;
 
@@ -53,7 +58,8 @@ namespace RappiFixer.UseCases
             {
                 var calendarDay = new CalendarDay()
                 {
-                    Day = startDate
+                    Day = startDate,
+                    WithinDateRange = startDate >= originalStartDate && startDate <= originalEndDate
                 };
 
                 var lookedUpDate = calendarDays.FirstOrDefault(x => x.OrderDate.Date == startDate.Date);
@@ -68,8 +74,6 @@ namespace RappiFixer.UseCases
                 calendar[calendarWeekIndex, calendarWeekDayIndex] = calendarDay;
                 
                 calendarWeekDayIndex++;
-
-                
 
                 if(calendarWeekDayIndex % 7 == 0 && startDate != endDate)
                 {
@@ -93,11 +97,11 @@ namespace RappiFixer.UseCases
             public int NumberOfOrders { get; set; }
             public double Profit { get; set; }
             public double Cost { get; set; }
+            public bool WithinDateRange { get; set; }
         }
 
         private static void PrintOutCalendar(CalendarDay[,] calendarRow, int totalWeeks)
         {
-            const int calenderCellWidth = 14;
             const int daysInWeek = 7;
 
             Console.WriteLine();
@@ -127,21 +131,21 @@ namespace RappiFixer.UseCases
 
                 for (var day = 0; day < daysInWeek; day++)
                 {
-                    Console.Write($"|{calendarRow[week, day].NumberOfOrders,-calenderCellWidth}");
+                    PrintCell(calendarRow[week, day], $"|{calendarRow[week, day].NumberOfOrders,-calenderCellWidth}");
                 }
 
                 Console.WriteLine("|");
 
                 for (var day = 0; day < daysInWeek; day++)
                 {
-                    Console.Write($"|{calendarRow[week, day].Cost,calenderCellWidth:c}");
+                    PrintCell(calendarRow[week, day], $"|{calendarRow[week, day].Cost,calenderCellWidth:c}");
                 }
 
                 Console.WriteLine("|");
 
                 for (var day = 0; day < daysInWeek; day++)
                 {
-                    Console.Write($"|{calendarRow[week, day].Profit,calenderCellWidth:c}");
+                    PrintCell(calendarRow[week, day], $"|{calendarRow[week, day].Profit,calenderCellWidth:c}");
                 }
 
                 Console.WriteLine("|");
@@ -153,6 +157,17 @@ namespace RappiFixer.UseCases
 
         }
 
+        private static void PrintCell(CalendarDay day, string normalText)
+        {
+            if (day.WithinDateRange)
+            {
+                Console.Write(normalText);
+            }
+            else
+            {
+                Console.Write($"|{" ",calenderCellWidth}");
+            }
+        }
 
         public static List<String> GetLocalizedDayOfWeekValues(CultureInfo culture)
         {
