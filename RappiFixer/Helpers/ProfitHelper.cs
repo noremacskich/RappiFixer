@@ -37,7 +37,7 @@ namespace RappiFixer.Helpers
 
             Console.WriteLine($"=================================================================================={new string('=', 30)}");
 
-            Console.WriteLine($"{products.Sum(x => x.Count),countSpacing} {products.Sum(x => x.Cost),costSpacing:c} {products.Sum(x => x.Profit),costSpacing:c}");
+            Console.WriteLine($"{products.Sum(x => x.Count),countSpacing} {products.Sum(x => x.Cost),costSpacing:c} {products.Sum(x => x.Profit),costSpacing:c} Retorno Porcentual: {products.Sum(x => x.Profit)/products.Sum(x => x.Cost),4:P} ");
         }
     }
 }
