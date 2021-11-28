@@ -74,15 +74,15 @@ namespace RappiFixer.UseCases
                     var convertedHourlyRecords = lookedUpDate.AllOrderItems
                     .Select(x => new {
                         originalItem = x,
-                        TimeStamp = DateTime.ParseExact(x.created_at.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", myCI.DateTimeFormat),
-                        HourInteger = DateTime.ParseExact(x.created_at.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", myCI.DateTimeFormat).Hour,
+                        TimeStamp = ConvertToLocalDateTime(x.created_at.Substring(0, 19)),
+                        HourInteger = ConvertToLocalDateTime(x.created_at.Substring(0, 19)).Hour,
                     }).ToList();
 
 
                     calendarDay.HourlyBreakdown.AddRange(convertedHourlyRecords.GroupBy(x => x.HourInteger)
                     .Select(x => new HourBreakdown(){
                             TimeStamp = x.First().TimeStamp,
-                            HourText = x.First().TimeStamp.ToString("H tt"),
+                            HourText = x.First().TimeStamp.ToString("h tt"),
                             ItemCount = x.Count()
                         }).ToList());
                 }
@@ -105,6 +105,11 @@ namespace RappiFixer.UseCases
 
 
 
+        }
+
+        private static DateTime ConvertToLocalDateTime(string date){
+            var parsedDate = DateTime.ParseExact(date.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
+            return DateTime.SpecifyKind(parsedDate, DateTimeKind.Utc).ToLocalTime();
         }
 
         private class CalendarDay
@@ -191,7 +196,7 @@ namespace RappiFixer.UseCases
                         if(calendarDay.HourlyBreakdown.Count <= hourlyCount){
                             PrintCell(calendarRow[week, day], $"|{" ",-calenderCellWidth}");
                         }else{
-                            var hour = calendarDay.HourlyBreakdown[hourlyCount];
+                            var hour = calendarDay.HourlyBreakdown.OrderBy(x => x.TimeStamp).ToList()[hourlyCount];
                             PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,-calenderCellWidth}");
                         }
                     }
