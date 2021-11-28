@@ -71,11 +71,11 @@ namespace RappiFixer.UseCases
                     calendarDay.Profit = lookedUpDate.Profit;
                     calendarDay.Cost = lookedUpDate.Cost;
 
-                    var convertedHourlyRecords = lookedUpDate.AllOrderItems
+                    var convertedHourlyRecords = lookedUpDate.AllOrderItems.GroupBy(x => x.order_id)
                     .Select(x => new {
                         originalItem = x,
-                        TimeStamp = ConvertToLocalDateTime(x.created_at.Substring(0, 19)),
-                        HourInteger = ConvertToLocalDateTime(x.created_at.Substring(0, 19)).Hour,
+                        TimeStamp = ConvertToLocalDateTime(x.First().created_at.Substring(0, 19)),
+                        HourInteger = ConvertToLocalDateTime(x.First().created_at.Substring(0, 19)).Hour,
                     }).ToList();
 
 
