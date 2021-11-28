@@ -69,6 +69,22 @@ namespace RappiFixer.UseCases
                     calendarDay.NumberOfOrders = lookedUpDate.NumberOfOrders;
                     calendarDay.Profit = lookedUpDate.Profit;
                     calendarDay.Cost = lookedUpDate.Cost;
+                    calendarDay.HourlyBreakdown = new List<HourBreakdown>();
+
+                    var convertedHourlyRecords = lookedUpDate.AllOrderItems
+                    .Select(x => new {
+                        originalItem = x,
+                        TimeStamp = DateTime.ParseExact(x.created_at.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", myCI.DateTimeFormat),
+                        HourInteger = DateTime.ParseExact(x.created_at.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", myCI.DateTimeFormat).Hour,
+                    }).ToList();
+
+
+                    calendarDay.HourlyBreakdown.AddRange(convertedHourlyRecords.GroupBy(x => x.HourInteger)
+                    .Select(x => new HourBreakdown(){
+                            TimeStamp = x.First().TimeStamp,
+                            HourText = x.First().TimeStamp.ToString("H tt"),
+                            ItemCount = x.Count()
+                        }).ToList());
                 }
 
                 calendar[calendarWeekIndex, calendarWeekDayIndex] = calendarDay;
@@ -98,6 +114,14 @@ namespace RappiFixer.UseCases
             public double Profit { get; set; }
             public double Cost { get; set; }
             public bool WithinDateRange { get; set; }
+            public List<HourBreakdown> HourlyBreakdown {get; set; }
+        }
+
+        private class HourBreakdown
+        {
+            public int ItemCount {get; set;}
+            public DateTime TimeStamp {get; set;}
+            public string HourText { get; set; }
         }
 
         private static void PrintOutCalendar(CalendarDay[,] calendarRow, int totalWeeks)
@@ -145,6 +169,40 @@ namespace RappiFixer.UseCases
 
                 for (var day = 0; day < daysInWeek; day++)
                 {
+                    PrintCell(calendarRow[week, day], $"|{calendarRow[week, day].Profit,calenderCellWidth:c}");
+                }
+
+                Console.WriteLine("|");
+
+
+                var mostHoursInDay = 0;
+
+                for (var day = 0; day < daysInWeek; day++)
+                {
+                    var calendarDay = calendarRow[week, day];
+                    if(calendarDay.HourlyBreakdown != null && calendarDay.HourlyBreakdown.Count > mostHoursInDay){
+                        mostHoursInDay = calendarRow[week, day].HourlyBreakdown.Count;
+                    }
+                }
+
+                for (var hourlyCount = 0; hourlyCount < mostHoursInDay; hourlyCount++){
+                    for (var day = 0; day < daysInWeek; day++)
+                    {
+                        var calendarDay = calendarRow[week, day];
+                        if(calendarDay.HourlyBreakdown == null || calendarDay.HourlyBreakdown.Count <= hourlyCount){
+                            PrintCell(calendarRow[week, day], $"|{"",calenderCellWidth:c}");
+                        }else{
+                            var hour = calendarRow[week, day].HourlyBreakdown[hourlyCount];
+                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,calenderCellWidth:c}");
+                        }
+                    }
+
+                }
+
+                for (var day = 0; day < daysInWeek; day++)
+                {
+                    
+
                     PrintCell(calendarRow[week, day], $"|{calendarRow[week, day].Profit,calenderCellWidth:c}");
                 }
 
