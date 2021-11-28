@@ -1,6 +1,7 @@
 ﻿using RappiFixer.UseCases;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace RappiFixer
@@ -30,13 +31,17 @@ namespace RappiFixer
             var allRecords = LoadInRappiCSVFileUseCase.LoadInCSVFile(rappiFileLocation);
             var productCosts = LoadInProductCostsUseCase.LoadInProductCostsCSV(productCostsFileLocation);
 
+
+            CultureInfo myCI = CultureInfo.InvariantCulture;
             var uniqueRecords = allRecords
                 .GroupBy(x => x.order_id)
                 .Select(x => new
                 {
-                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
+                    Date = DateTime.ParseExact(x.First().created_at.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", myCI.DateTimeFormat)
                 })
                 .ToList();
+
+            // 2021-11-02 00:34:20 +0000 UTC
 
             Console.WriteLine($"Tuvo {uniqueRecords.Count()} pedidos con un total de {allRecords.Count} productos vendidos para las fechas del {uniqueRecords.Min(x => x.Date).ToLongDateString()} al {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
 
@@ -53,7 +58,7 @@ namespace RappiFixer
                 Console.WriteLine(" 5: Ganancia diaria");
                 Console.WriteLine(" 6: Vista de calendario");
                 Console.WriteLine(" 7: Totales del tipo de producto");
-
+                Console.WriteLine(" 8: Desglose del calendario por horas");
 
                 var menuId = ParseOption();
 
@@ -69,6 +74,7 @@ namespace RappiFixer
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(allRecords, productCosts); break;
                     case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(allRecords, productCosts); break;
                     case 7: InventoryTypeUseCase.PrintOutInventoryTypes(allRecords, productCosts); break;
+                    case 8: PrintOutHourlyMonthlyTotalsUseCase.PrintOutHourlyMonthlyTotals(allRecords, productCosts); break;
                 }
 
                 Console.WriteLine();
@@ -92,7 +98,7 @@ namespace RappiFixer
                 return -1;
             }
 
-            var validIds = new List<long> { 0, 1, 2, 3, 4, 5, 6, 7 };
+            var validIds = new List<long> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
             if (!validIds.Contains(menuId))
             {
                 Console.WriteLine("No ingresaste un número de menú válido");
