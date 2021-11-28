@@ -189,10 +189,10 @@ namespace RappiFixer.UseCases
                     {
                         var calendarDay = calendarRow[week, day];
                         if(calendarDay.HourlyBreakdown.Count <= hourlyCount){
-                            PrintCell(calendarRow[week, day], $"|{" ",calenderCellWidth:c}");
+                            PrintCell(calendarRow[week, day], $"|{" ",-calenderCellWidth}");
                         }else{
                             var hour = calendarDay.HourlyBreakdown[hourlyCount];
-                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,calenderCellWidth}");
+                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,-calenderCellWidth}");
                         }
                     }
                     Console.WriteLine("|");
