@@ -59,7 +59,8 @@ namespace RappiFixer.UseCases
                 var calendarDay = new CalendarDay()
                 {
                     Day = startDate,
-                    WithinDateRange = startDate >= originalStartDate && startDate <= originalEndDate
+                    WithinDateRange = startDate >= originalStartDate && startDate <= originalEndDate,
+                    HourlyBreakdown = new List<HourBreakdown>()
                 };
 
                 var lookedUpDate = calendarDays.FirstOrDefault(x => x.OrderDate.Date == startDate.Date);
@@ -69,7 +70,6 @@ namespace RappiFixer.UseCases
                     calendarDay.NumberOfOrders = lookedUpDate.NumberOfOrders;
                     calendarDay.Profit = lookedUpDate.Profit;
                     calendarDay.Cost = lookedUpDate.Cost;
-                    calendarDay.HourlyBreakdown = new List<HourBreakdown>();
 
                     var convertedHourlyRecords = lookedUpDate.AllOrderItems
                     .Select(x => new {
@@ -179,8 +179,7 @@ namespace RappiFixer.UseCases
 
                 for (var day = 0; day < daysInWeek; day++)
                 {
-                    var calendarDay = calendarRow[week, day];
-                    if(calendarDay.HourlyBreakdown != null && calendarDay.HourlyBreakdown.Count > mostHoursInDay){
+                    if(calendarRow[week, day].HourlyBreakdown.Count > mostHoursInDay){
                         mostHoursInDay = calendarRow[week, day].HourlyBreakdown.Count;
                     }
                 }
@@ -189,24 +188,15 @@ namespace RappiFixer.UseCases
                     for (var day = 0; day < daysInWeek; day++)
                     {
                         var calendarDay = calendarRow[week, day];
-                        if(calendarDay.HourlyBreakdown == null || calendarDay.HourlyBreakdown.Count <= hourlyCount){
+                        if(calendarDay.HourlyBreakdown.Count <= hourlyCount){
                             PrintCell(calendarRow[week, day], $"|{"",calenderCellWidth:c}");
                         }else{
-                            var hour = calendarRow[week, day].HourlyBreakdown[hourlyCount];
-                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,calenderCellWidth:c}");
+                            var hour = calendarDay.HourlyBreakdown[hourlyCount];
+                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,calenderCellWidth}");
                         }
                     }
 
                 }
-
-                for (var day = 0; day < daysInWeek; day++)
-                {
-                    
-
-                    PrintCell(calendarRow[week, day], $"|{calendarRow[week, day].Profit,calenderCellWidth:c}");
-                }
-
-                Console.WriteLine("|");
 
             }
 
