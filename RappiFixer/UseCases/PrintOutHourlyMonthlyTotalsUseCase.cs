@@ -19,7 +19,7 @@ namespace RappiFixer.UseCases
 
             var calendarDays = allRecords
                 .Where(x => x.state == "finished")
-                .GroupBy(x => DateTime.Parse(x.created_at.Substring(0, 10)).Date)
+                .GroupBy(x => ConvertToLocalDateTime(x.created_at.Substring(0, 19)).Date)
                 .Select(x => new
                 {
                     OrderDate = x.Key,
@@ -75,11 +75,10 @@ namespace RappiFixer.UseCases
                     .Select(x => new {
                         originalItem = x,
                         TimeStamp = ConvertToLocalDateTime(x.First().created_at.Substring(0, 19)),
-                        HourInteger = ConvertToLocalDateTime(x.First().created_at.Substring(0, 19)).Hour,
                     }).ToList();
 
 
-                    calendarDay.HourlyBreakdown.AddRange(convertedHourlyRecords.GroupBy(x => x.HourInteger)
+                    calendarDay.HourlyBreakdown.AddRange(convertedHourlyRecords.GroupBy(x => x.TimeStamp.Hour)
                     .Select(x => new HourBreakdown(){
                             TimeStamp = x.First().TimeStamp,
                             HourText = x.First().TimeStamp.ToString("h tt"),
