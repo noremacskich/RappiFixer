@@ -1,4 +1,4 @@
-using RappiFixer.UseCases;
+﻿using RappiFixer.UseCases;
 using RappiFixer.Presenter;
 using System;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace RappiFixer
                     case 3: PrintOutCanceledOrdersUseCase.PrintOutInventory(allRecords, productCosts); break;
                     case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(allRecords, productCosts); break;
-                    case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(allRecords, productCosts); break;
+                    case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(CSVToRappiDataConverter.ConvertToRappiDataModel(allRecords), productCosts); break;
                     case 7: InventoryTypeUseCase.PrintOutInventoryTypes(allRecords, productCosts); break;
                     case 8: PrintOutHourlyMonthlyTotalsUseCase.PrintOutHourlyMonthlyTotals(allRecords, productCosts); break;
                 }

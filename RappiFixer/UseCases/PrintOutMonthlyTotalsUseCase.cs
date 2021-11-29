@@ -14,20 +14,20 @@ namespace RappiFixer.UseCases
         const int calenderCellWidth = 14;
 
 
-        internal static void PrintOutMonthlyTotals(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
+        internal static void PrintOutMonthlyTotals(List<RappiDataModel> allRecords, List<ProductCost> productCosts)
         {
 
             var calendarDays = allRecords
-                .Where(x => x.state == "finished")
-                .GroupBy(x => DateTime.Parse(x.created_at.Substring(0, 10)).Date)
+                .Where(x => x.OrderState == "finished")
+                .GroupBy(x => x.CreateDate.Date)
                 .Select(x => new
                 {
                     OrderDate = x.Key,
-                    Count = x.Sum(x => x.product_units),
-                    Profit = x.ToList().Sum(a => (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(a.product, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * a.product_units),
-                    Cost = x.Sum(x => x.product_total_price_with_discount),
+                    Count = x.Sum(x => x.NumberOfUnits),
+                    Profit = x.ToList().Sum(a => (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(a.ProductName, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * a.NumberOfUnits),
+                    Cost = x.Sum(x => x.Cost),
                     AllOrderItems = x.ToList(),
-                    NumberOfOrders = x.GroupBy(x => x.order_id).Count()
+                    NumberOfOrders = x.GroupBy(x => x.OrderId).Count()
                 });
 
             // Gets the Calendar instance associated with a CultureInfo.
