@@ -66,12 +66,12 @@ namespace RappiFixer
                 switch (menuId)
                 {
                     case 0: inMenu = false; break;
-                    case 1: LookupOrdersUseCase.LookupRecords(allRecords, productCosts); break;
+                    case 1: LookupOrdersUseCase.LookupRecords(records, productCosts); break;
                     case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
                     case 3: PrintOutCanceledOrdersUseCase.PrintOutInventory(allRecords, productCosts); break;
                     case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(allRecords, productCosts); break;
-                    case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(CSVToRappiDataConverter.ConvertToRappiDataModel(allRecords), productCosts); break;
+                    case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(records, productCosts); break;
                     case 7: InventoryTypeUseCase.PrintOutInventoryTypes(allRecords, productCosts); break;
                     case 8: PrintOutHourlyMonthlyTotalsUseCase.PrintOutHourlyMonthlyTotals(allRecords, productCosts); break;
                 }

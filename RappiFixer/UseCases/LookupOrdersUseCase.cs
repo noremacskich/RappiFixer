@@ -9,18 +9,18 @@ namespace RappiFixer.UseCases
 {
     public class LookupOrdersUseCase
     {
-        internal static void LookupRecords(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
+        internal static void LookupRecords(List<RappiDataModel> allRecords, List<ProductCost> productCosts)
         {
             var uniqueRecords = allRecords
-                .GroupBy(x => x.order_id)
+                .GroupBy(x => x.OrderId)
                 .Select(x => new OrderSummary()
                 {
-                    OrderId = x.First().order_id,
-                    UserName = x.First().user,
+                    OrderId = x.First().OrderId,
+                    UserName = x.First().UserName,
                     NumberOfProducts = x.Count(),
-                    Status = x.First().state,
-                    Products = x.Select(x => x.product).ToList(),
-                    Date = DateTime.Parse(x.First().created_at.Substring(0, 20))
+                    Status = x.First().OrderState,
+                    Products = x.Select(x => x.ProductName).ToList(),
+                    Date = x.First().CreateDate
                 }).ToList();
 
             var lookingForNumbers = true;
