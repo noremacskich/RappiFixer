@@ -1,4 +1,5 @@
-﻿using RappiFixer.UseCases;
+using RappiFixer.UseCases;
+using RappiFixer.Presenter;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -31,17 +32,15 @@ namespace RappiFixer
             var allRecords = LoadInRappiCSVFileUseCase.LoadInCSVFile(rappiFileLocation);
             var productCosts = LoadInProductCostsUseCase.LoadInProductCostsCSV(productCostsFileLocation);
 
-
+            var records = CSVToRappiDataConverter.ConvertToRappiDataModel(allRecords);
             CultureInfo myCI = CultureInfo.InvariantCulture;
-            var uniqueRecords = allRecords
-                .GroupBy(x => x.order_id)
+            var uniqueRecords = records
+                .GroupBy(x => x.OrderId)
                 .Select(x => new
                 {
-                    Date = DateTime.ParseExact(x.First().created_at.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", myCI.DateTimeFormat)
+                    Date = x.First().CreateDate
                 })
                 .ToList();
-
-            // 2021-11-02 00:34:20 +0000 UTC
 
             Console.WriteLine($"Tuvo {uniqueRecords.Count()} pedidos con un total de {allRecords.Count} productos vendidos para las fechas del {uniqueRecords.Min(x => x.Date).ToLongDateString()} al {uniqueRecords.Max(x => x.Date).ToLongDateString()}");
 

@@ -6,9 +6,9 @@ using System.Globalization;
 
 namespace RappiFixer.Presenter
 {
-    public class CSVToRappiDataConverter
+    public static class CSVToRappiDataConverter
     {
-        public List<RappiDataModel> ConvertToRappiDataModel(List<CSVHeaders> csvHeaders)
+        public static List<RappiDataModel> ConvertToRappiDataModel(List<CSVHeaders> csvHeaders)
         {
             return csvHeaders.Select(x => new RappiDataModel(){
                 Cost = x.product_total_price_with_discount,
