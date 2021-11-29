@@ -73,7 +73,7 @@ namespace RappiFixer
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(records, productCosts); break;
                     case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(records, productCosts); break;
                     case 7: InventoryTypeUseCase.PrintOutInventoryTypes(allRecords, productCosts); break;
-                    case 8: PrintOutHourlyMonthlyTotalsUseCase.PrintOutHourlyMonthlyTotals(allRecords, productCosts); break;
+                    case 8: PrintOutHourlyMonthlyTotalsUseCase.PrintOutHourlyMonthlyTotals(records, productCosts); break;
                 }
 
                 Console.WriteLine();

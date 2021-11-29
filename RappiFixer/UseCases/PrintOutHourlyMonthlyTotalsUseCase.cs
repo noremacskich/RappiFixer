@@ -14,20 +14,20 @@ namespace RappiFixer.UseCases
         const int calenderCellWidth = 14;
 
 
-        internal static void PrintOutHourlyMonthlyTotals(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
+        internal static void PrintOutHourlyMonthlyTotals(List<RappiDataModel> allRecords, List<ProductCost> productCosts)
         {
 
             var calendarDays = allRecords
-                .Where(x => x.state == "finished")
-                .GroupBy(x => ConvertToLocalDateTime(x.created_at.Substring(0, 19)).Date)
+                .Where(x => x.OrderState == "finished")
+                .GroupBy(x => x.CreateDate.Date)
                 .Select(x => new
                 {
                     OrderDate = x.Key,
-                    Count = x.Sum(x => x.product_units),
-                    Profit = x.ToList().Sum(a => (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(a.product, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * a.product_units),
-                    Cost = x.Sum(x => x.product_total_price_with_discount),
+                    Count = x.Sum(x => x.NumberOfUnits),
+                    Profit = x.ToList().Sum(a => (productCosts.FirstOrDefault(y => y.PROMOCION.Trim().Equals(a.ProductName, StringComparison.InvariantCultureIgnoreCase))?.GANACIA ?? 0) * a.NumberOfUnits),
+                    Cost = x.Sum(x => x.Cost),
                     AllOrderItems = x.ToList(),
-                    NumberOfOrders = x.GroupBy(x => x.order_id).Count()
+                    NumberOfOrders = x.GroupBy(x => x.OrderId).Count()
                 });
 
             // Gets the Calendar instance associated with a CultureInfo.
@@ -71,10 +71,10 @@ namespace RappiFixer.UseCases
                     calendarDay.Profit = lookedUpDate.Profit;
                     calendarDay.Cost = lookedUpDate.Cost;
 
-                    var convertedHourlyRecords = lookedUpDate.AllOrderItems.GroupBy(x => x.order_id)
+                    var convertedHourlyRecords = lookedUpDate.AllOrderItems.GroupBy(x => x.OrderId)
                     .Select(x => new {
                         originalItem = x,
-                        TimeStamp = ConvertToLocalDateTime(x.First().created_at.Substring(0, 19)),
+                        TimeStamp = x.First().CreateDate,
                     }).ToList();
 
 
@@ -99,16 +99,8 @@ namespace RappiFixer.UseCases
                 startDate = startDate.AddDays(1);
             }
 
-
             PrintOutCalendar(calendar, calendarWeekIndex);
 
-
-
-        }
-
-        private static DateTime ConvertToLocalDateTime(string date){
-            var parsedDate = DateTime.ParseExact(date.Substring(0, 19), "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
-            return DateTime.SpecifyKind(parsedDate, DateTimeKind.Utc).ToLocalTime();
         }
 
         private class CalendarDay

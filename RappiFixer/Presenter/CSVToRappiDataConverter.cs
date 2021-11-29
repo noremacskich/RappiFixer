@@ -12,7 +12,7 @@ namespace RappiFixer.Presenter
         {
             return csvHeaders.Select(x => new RappiDataModel(){
                 Cost = x.product_total_price_with_discount,
-                CreateDate = ConvertToLocalDateTime(x.created_at.Substring(0, 19)).Date,
+                CreateDate = ConvertToLocalDateTime(x.created_at.Substring(0, 19)),
                 NumberOfUnits = x.product_units,
                 OrderId = x.order_id,
                 ProductName = x.product,
