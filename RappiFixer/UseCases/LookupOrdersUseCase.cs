@@ -64,7 +64,7 @@ namespace RappiFixer.UseCases
                 Console.WriteLine($"Nombre             : {lookedupUser.UserName}");
                 Console.WriteLine($"Estado de la orden : {lookedupUser.Status}");
 
-                var userProducts = allRecords.Where(x => x.order_id == orderId).ToList();
+                var userProducts = allRecords.Where(x => x.OrderId == orderId).ToList();
                 ProfitHelper.PrintOutProfits(userProducts, productCosts);
 
 
