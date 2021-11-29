@@ -15,7 +15,7 @@ namespace RappiFixer.Presenter
                 CreateDate = ConvertToLocalDateTime(x.created_at.Substring(0, 19)).Date,
                 NumberOfUnits = x.product_units,
                 OrderId = x.order_id,
-                Product = x.product,
+                ProductName = x.product,
                 UserName = x.user,
                 OrderState = x.state
             }).ToList();
