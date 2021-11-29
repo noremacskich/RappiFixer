@@ -69,7 +69,7 @@ namespace RappiFixer
                     case 1: LookupOrdersUseCase.LookupRecords(records, productCosts); break;
                     case 2: PrintOutSoldInventoryUseCase.PrintOutInventory(allRecords, productCosts); break;
                     case 3: PrintOutCanceledOrdersUseCase.PrintOutInventory(allRecords, productCosts); break;
-                    case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(allRecords, productCosts); break;
+                    case 4: RepeatCustomersUseCase.PrintOutRepeatCustomers(records, productCosts); break;
                     case 5: PrintOutDailyTotalsUseCase.PrintOutDailyTotals(records, productCosts); break;
                     case 6: PrintOutMonthlyTotalsUseCase.PrintOutMonthlyTotals(records, productCosts); break;
                     case 7: InventoryTypeUseCase.PrintOutInventoryTypes(allRecords, productCosts); break;

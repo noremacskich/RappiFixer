@@ -9,18 +9,18 @@ namespace RappiFixer.UseCases
 {
     public class RepeatCustomersUseCase
     {
-        internal static void PrintOutRepeatCustomers(List<CSVHeaders> allRecords, List<ProductCost> productCosts)
+        internal static void PrintOutRepeatCustomers(List<RappiDataModel> allRecords, List<ProductCost> productCosts)
         {
 
             var repeatCustomers = allRecords
-                .Where(x => x.state == "finished")
-                .GroupBy(x => new { x.user })
+                .Where(x => x.OrderState == "finished")
+                .GroupBy(x => new { x.UserName })
                 .Select(x => new
                 {
-                    name = x.First().user,
-                    NumberOfOrders = x.GroupBy(x => x.order_id).Count(),
-                    FirstOrderDate = x.Min(y => DateTime.Parse(y.created_at.Substring(0, 20))),
-                    LastOrderDate = x.Max(y => DateTime.Parse(y.created_at.Substring(0, 20)))
+                    name = x.First().UserName,
+                    NumberOfOrders = x.GroupBy(x => x.OrderId).Count(),
+                    FirstOrderDate = x.Min(y => y.CreateDate.Date),
+                    LastOrderDate = x.Max(y => y.CreateDate.Date)
                 });
 
 
@@ -34,7 +34,7 @@ namespace RappiFixer.UseCases
                 Console.WriteLine("Preferencias del cliente");
 
 
-                var records = allRecords.Where(x => x.user == customer.name).ToList();
+                var records = allRecords.Where(x => x.UserName == customer.name).ToList();
                 ProfitHelper.PrintOutProfits(records, productCosts);
             }
 
