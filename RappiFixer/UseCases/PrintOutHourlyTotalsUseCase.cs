@@ -77,7 +77,8 @@ namespace RappiFixer.UseCases
                 {
                     HourTimeStamp = x.First().TimeStamp.Hour,
                     HourText = x.First().TimeStamp.ToString("h tt"),
-                    ItemCount = x.Count()
+                    ItemCount = x.Count(),
+                    Average = x.GroupBy(y => y.TimeStamp.DayOfYear).Count()
                 }));
 
                 calendar[calendarWeekIndex, calendarWeekDayIndex] = calendarDay;
@@ -105,6 +106,7 @@ namespace RappiFixer.UseCases
             public int ItemCount {get; set;}
             public int HourTimeStamp {get; set;}
             public string HourText { get; set; }
+            public object Average { get; internal set; }
         }
 
         private static void PrintOutCalendar(CalendarDay[,] calendarRow, int totalWeeks)
@@ -166,7 +168,7 @@ namespace RappiFixer.UseCases
                             PrintCell(calendarRow[week, day], $"|{" ",-calenderCellWidth}");
                         }else{
                             var hour = calendarDay.HourlyBreakdown.OrderBy(x => x.HourTimeStamp).ToList()[hourlyCount];
-                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount,-calenderCellWidth}");
+                            PrintCell(calendarRow[week, day], $"|{hour.HourText + ": " + hour.ItemCount + ":" + hour.Average,-calenderCellWidth}");
                         }
                     }
                     Console.WriteLine("|");
@@ -176,7 +178,7 @@ namespace RappiFixer.UseCases
 
             Console.WriteLine(new String('-', (calenderCellWidth + 1) * daysInWeek + 1));
 
-
+            Console.WriteLine("Cómo leer: Hora: 5 pedidos en 2 días diferentes (5:2)");
         }
 
         private static void PrintCell(CalendarDay day, string normalText)
