@@ -31,7 +31,7 @@ namespace RappiFixer.UseCases
                 });
 
             // Gets the Calendar instance associated with a CultureInfo.
-            CultureInfo myCI = CultureInfo.GetCultureInfo("es-es");
+            CultureInfo myCI = CultureInfo.CurrentCulture;
             Calendar myCal = myCI.Calendar;
 
             // Gets the DTFI properties required by GetWeekOfYear.
@@ -115,7 +115,7 @@ namespace RappiFixer.UseCases
             Console.WriteLine();
             Console.WriteLine();
 
-            var weekDayHeaders = GetLocalizedDayOfWeekValues(CultureInfo.GetCultureInfo("es-es"));
+            var weekDayHeaders = GetLocalizedDayOfWeekValues(CultureInfo.CurrentCulture);
 
             for (var day = 0; day < daysInWeek; day++)
             {
